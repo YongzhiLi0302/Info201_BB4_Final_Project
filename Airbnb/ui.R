@@ -6,16 +6,19 @@ library(shinythemes)
 shinyUI(fluidPage( 
   navbarPage("Aribnb in Seattle",
              theme = shinythemes::shinytheme("slate"),  # <--- Specify theme here
-             tabPanel(title = "Home", textOutput("welcome")),
-             tabPanel(title = "Plot", sidebarPanel(
+             tabPanel(title = "Home", textOutput("welcome message and getting started")),
+             tabPanel(title = "Seattle's Map", sidebarPanel(
                textInput("txt", "Text input:", "text here"),
                sliderInput("slider", "Slider input:", 1, 100, 30),
                actionButton("action", "Button"),
                actionButton("action2", "Button2", class = "btn-primary")
              )),
+             tabPanel(title = "Seattle's listing", textOutput("table")),
+             tabPanel(title = "Seattle's neighbourhoods", textOutput("table")),
+             tabPanel(title = "Seattle's reviews", textOutput("table")),
              navbarMenu("More",
-                        tabPanel("Summary", textOutput("Summary")),
-                        tabPanel("Table", "Table tab contents...")
+                        tabPanel("Contact Us", textOutput("collaborators info")),
+                        tabPanel("Q&A", "common questions")
              )
     )
   )
