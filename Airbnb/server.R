@@ -41,7 +41,6 @@ shinyServer(function(input,output) {
     leaflet(data = df) %>%
       addTiles() %>%  # Add default OpenStreetMap map tiles
       setMaxBounds(min(df$longitude), min(df$latitude), max(df$longitude), max(df$latitude)) %>%
-    # (lng = -122.3321, lat = 47.6062, zoom = 12) %>%  # Set default view at Seattle 
       addCircles(lng = ~longitude, lat = ~latitude, radius = 10, color = "#18BC9C",
                weight = 3, fillOpacity = 0.9)
   })
@@ -62,6 +61,7 @@ shinyServer(function(input,output) {
       geom_text(label = plot_table$sum_percent) +
       labs(x = "House Types", y = "Percentage(%)", subtitle = "House Types in Seattle Airbnb Market")
   }) 
+  
   output$roomtype <- renderPlot({
     room_type <- count(listings2_df, room_type)
     room_type = mutate(room_type, percent = n / sum(n) * 100)
