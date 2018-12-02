@@ -40,10 +40,12 @@ shinyServer(function(input,output) {
     df <- filtered_Neighbourhood()
     leaflet(data = df) %>%
       addTiles() %>%  # Add default OpenStreetMap map tiles
-      setView(lng = -122.3321, lat = 47.6062, zoom = 12) %>%  # Set default view at Seattle 
+      setMaxBounds(min(df$longitude), min(df$latitude), max(df$longitude), max(df$latitude)) %>%
+    # (lng = -122.3321, lat = 47.6062, zoom = 12) %>%  # Set default view at Seattle 
       addCircles(lng = ~longitude, lat = ~latitude, radius = 10, color = "#18BC9C",
                weight = 3, fillOpacity = 0.9)
   })
+  
   output$housetype <- renderPlot({
     count_type <- count(listings2_df, property_type)
     other_type <- filter(count_type, property_type != "Apartment" & property_type != "House")
