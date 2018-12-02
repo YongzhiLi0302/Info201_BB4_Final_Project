@@ -41,7 +41,8 @@ shinyUI(fluidPage(
                                     h3("Airbnb listings explorer"),
                                     
                                     selectInput("color", "Color", vars),
-                                    selectInput("size", "Size", vars, selected = "adultpop")
+                                    selectInput("size", "Size", vars, selected = "adultpop"),
+                                    uiOutput("neighbourhood")
                                     )
                       )),
                       
