@@ -44,6 +44,32 @@ shinyServer(function(input,output) {
       addCircles(lng = ~longitude, lat = ~latitude, radius = 10, color = "#18BC9C",
                weight = 3, fillOpacity = 0.9)
   })
-  
+  output$housetype <- renderPlot({
+    count_type <- count(listings2_df, property_type)
+    other_type <- filter(count_type, property_type != "Apartment" & property_type != "House")
+    othersum <- sum(other_type$n)
+    plot_table <- filter(count_type,property_type == "Apartment" | property_type == "House")
+    plot_table$property_type <- as.character(plot_table$property_type)
+    plot_table <- rbind(plot_table, "3" = c("Others", othersum))
+    plot_table$n <- as.numeric(plot_table$n)
+    plot_table = mutate(plot_table, sum_percent = n / sum(n) * 100)
+    plot_table$sum_percent <- as.integer(plot_table$sum_percent)
+    ggplot(plot_table, aes(property_type, sum_percent)) + 
+      geom_bar(stat = "identity", width = 0.4, color = "white", fill = "cadetblue", size = 3) +
+      theme_set(theme_gray()) + 
+      geom_text(label = plot_table$sum_percent) +
+      labs(x = "House Types", y = "Percentage(%)", subtitle = "House Types in Seattle Airbnb Market")
+  }) 
+  output$roomtype <- renderPlot({
+    room_type <- count(listings2_df, room_type)
+    room_type = mutate(room_type, percent = n / sum(n) * 100)
+    room_type$percent <- as.integer(room_type$percent)
+    room_type$room_type <- as.character(room_type$room_type)
+    ggplot(room_type, aes(room_type, percent)) +
+      geom_bar(stat = "identity", width = 0.4, color = "white", fill = "cadetblue", size = 3) +
+      theme_set(theme_gray()) +
+      geom_text(label = room_type$percent) +
+      labs(x = "Room Type", y = "Percentage(%)", subtitle = "Room Types in Seattle Airbnb Market")
+  })  
 
 })
