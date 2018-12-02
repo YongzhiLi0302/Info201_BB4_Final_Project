@@ -2,31 +2,67 @@ library(shiny)
 library(dplyr)
 library(shinyWidgets)
 library(shinythemes)
+library(leaflet)
 
-shinyUI(fluidPage( 
-  navbarPage("Aribnb in Seattle",
-             theme = shinythemes::shinytheme("slate"),  # <--- Specify theme here
-             tabPanel(title = "Home", textOutput("welcome message and getting started")),
-             tabPanel(title = "Seattle's Map", sidebarPanel(
-               textInput("txt", "Text input:", "text here"),
-               sliderInput("slider", "Slider input:", 1, 100, 30),
-               actionButton("action", "Button"),
-               actionButton("action2", "Button2", class = "btn-primary")
-             )),
-             tabPanel(title = "Seattle's listing", textOutput("table")),
-             tabPanel(title = "Seattle's neighbourhoods", textOutput("table")),
-             tabPanel(title = "Seattle's reviews", textOutput("table")),
-             navbarMenu("More",
-                        tabPanel("Contact Us", textOutput("collaborators info")),
-                        tabPanel("Q&A", "common questions")
-             )
-    )
-  )
+vars <- c(
+  "Is Superhost?" = "host_is_superhost",
+  "House Type" = "property_type",
+  "Room Type" = "room_type",
+  "Price" = "price",
+  "Rating" = "review_scores_rating"
 )
 
-panel1 <- 
-mainPanel(
-  tabsetPanel(
-    tabPanel("Plot", plotOutput("plot")),
-    tabPanel("Map", plotOutput("map")),
-    tabPanel("Table", plotOutput("table"))))
+shinyUI(fluidPage(
+  navbarPage(inverse = F,
+             fluid = T,
+             theme = shinytheme("flatly"),
+             "Aribnb in Seattle",
+             
+             # introduction of our app
+             tabPanel("Home", 
+                      p("write introduction here")
+             ),
+             
+             
+             # Seattle Map Panel
+             tabPanel(title = "Seattle's Map", 
+                      div(class="outer",
+                       tags$head(
+                         # Include custom CSS
+                         includeCSS("style.css")
+                       ),
+                      
+                      leafletOutput("map", width = "100%", height = "100%"),
+                      
+                      absolutePanel(id = "controls", class = "panel panel-default", fixed = TRUE,
+                                    draggable = FALSE, top = 60, left = "auto", right = 20, bottom = "auto",
+                                    width = "auto", height = "auto",
+                                    
+                                    h3("Airbnb listings explorer"),
+                                    
+                                    selectInput("color", "Color", vars),
+                                    selectInput("size", "Size", vars, selected = "adultpop"),
+                                    conditionalPanel("input.color == 'superzip' || input.size == 'superzip'",
+                                                     # Only prompt for threshold when coloring or sizing by superzip
+                                                     numericInput("threshold", "SuperZIP threshold (top n percentile)", 5)
+                                    )
+                                    )
+                      )),
+                      
+             
+             tabPanel(title = "Seattle's listing"),
+             
+             tabPanel(title = "Seattle's neighbourhoods"),
+             
+             tabPanel(title = "Seattle's reviews"),
+             
+             navbarMenu("More",
+                        tabPanel("Contact Us"),
+                        tabPanel("Q&A", "common questions")
+             )
+  )
+             
+  )
+  
+  
+)
