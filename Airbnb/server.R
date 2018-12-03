@@ -41,9 +41,47 @@ shinyServer(function(input,output) {
     leaflet(data = df) %>%
       addTiles() %>%  # Add default OpenStreetMap map tiles
       setMaxBounds(min(df$longitude), min(df$latitude), max(df$longitude), max(df$latitude)) %>%
-      addCircles(lng = ~longitude, lat = ~latitude, radius = 10, color = "#18BC9C",
-               weight = 3, fillOpacity = 0.9)
+      addCircles(lng = ~longitude, lat = ~latitude, layerId = ~id, radius = 10, color = "#18BC9C",
+               weight = 5, fillOpacity = 0.9)
   })
+  
+  # Show a popup at the given listing
+  showListingPopup <- function(listing, lat, lng) {
+    df <- filtered_Neighbourhood()
+    
+    selectedListing <- filter(df, id == listing)
+    
+    content <- paste(paste0("<a href = \"", selectedListing$listing_url, "\">", tags$h3(selectedListing$name), "</a>"), 
+      as.character(tagList(
+      tags$strong(HTML(sprintf("%s, %s, %s",
+                               selectedListing$neighbourhood_cleansed, selectedListing$property_type, selectedListing$room_type
+      ))), tags$br(),
+      sprintf("Rating Score: %d", as.integer(selectedListing$review_scores_rating)), tags$br(),
+      sprintf("Price/day: %s", selectedListing$price), tags$br(),
+      sprintf("Bedrooms: %s", selectedListing$bedrooms), tags$br(),
+      sprintf("Bathrooms: %s", selectedListing$bathrooms), tags$br(),
+      sprintf("Beds: %s", selectedListing$beds), tags$br(),
+      sprintf("Accommadates: %d people", selectedListing$accommodates), tags$br()
+    )))
+
+    leafletProxy("map") %>% addPopups(lng, lat,  content,
+                                  options = popupOptions(closeButton = TRUE))
+  }
+  
+  # When map is clicked, show a popup with city info
+  observe({
+    leafletProxy("map") %>% clearPopups()
+    event <- input$map_shape_click
+    if (is.null(event))
+      return()
+    
+    isolate({
+      showListingPopup(event$id, event$lat, event$lng)
+    })
+  })
+  
+  
+  
   
   output$housetype <- renderPlot({
     count_type <- count(listings2_df, property_type)
@@ -55,13 +93,13 @@ shinyServer(function(input,output) {
     plot_table$n <- as.numeric(plot_table$n)
     plot_table = mutate(plot_table, sum_percent = n / sum(n) * 100)
     plot_table$sum_percent <- as.integer(plot_table$sum_percent)
-    ggplot(plot_table, aes(property_type, sum_percent)) + 
+    ggplot(plot_table, aes(property_type, sum_percent)) +
       geom_bar(stat = "identity", width = 0.4, color = "white", fill = "cadetblue", size = 3) +
-      theme_set(theme_gray()) + 
+      theme_set(theme_gray()) +
       geom_text(label = plot_table$sum_percent) +
       labs(x = "House Types", y = "Percentage(%)", subtitle = "House Types in Seattle Airbnb Market")
-  }) 
-  
+  })
+
   output$roomtype <- renderPlot({
     room_type <- count(listings2_df, room_type)
     room_type = mutate(room_type, percent = n / sum(n) * 100)
@@ -72,6 +110,6 @@ shinyServer(function(input,output) {
       theme_set(theme_gray()) +
       geom_text(label = room_type$percent) +
       labs(x = "Room Type", y = "Percentage(%)", subtitle = "Room Types in Seattle Airbnb Market")
-  })  
+  })
 
 })
