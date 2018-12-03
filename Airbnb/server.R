@@ -4,11 +4,11 @@ library(ggplot2)
 library(dplyr)
 library(leaflet)
 
-calendar_df <- read.csv("../data/calendar.csv.gz", stringsAsFactors = FALSE)
+calendar_df <- data.table::fread("../data/calendar.csv.gz", stringsAsFactors = FALSE)
 
-listings2_df <- read.csv("../data/listings 2.csv", stringsAsFactors = FALSE)
+listings2_df <- data.table::fread("../data/listings 2.csv", stringsAsFactors = FALSE)
 
-review_df <- read.csv("../data/reviews.csv.gz", stringsAsFactors = FALSE)
+review_df <- data.table::fread("../data/reviews.csv.gz", stringsAsFactors = FALSE)
 
 shinyServer(function(input,output) {
   output$welcome <- renderText({
@@ -74,17 +74,30 @@ shinyServer(function(input,output) {
     event <- input$map_shape_click
     if (is.null(event))
       return()
-    
     isolate({
       showListingPopup(event$id, event$lat, event$lng)
     })
   })
   
+  # Make a select input UI for House Type
+  output$Neighbor <- renderUI ({
+    Neighbor_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
+    selectInput("Neighbor1", "Neighbourhood Group", c("All", as.list(select(Neighbor_distinct, neighbourhood_group_cleansed))))
+    
+  }) 
   
+  # Reactive expression for the data subsetted to what the user selected
+  filtered_Neighbor <- reactive({
+    if (input$Neighbor1 == "All"){
+      listings2_df
+    } else {
+      filter(listings2_df, neighbourhood_group_cleansed == input$Neighbor1)
+    }
+  })
   
-  
-  output$housetype <- renderPlot({
-    count_type <- count(listings2_df, property_type)
+   output$housetype <- renderPlot({
+    newlisting2 <- filtered_Neighbor()
+    count_type <- count(newlisting2, property_type)
     other_type <- filter(count_type, property_type != "Apartment" & property_type != "House")
     othersum <- sum(other_type$n)
     plot_table <- filter(count_type,property_type == "Apartment" | property_type == "House")
@@ -100,8 +113,26 @@ shinyServer(function(input,output) {
       labs(x = "House Types", y = "Percentage(%)", subtitle = "House Types in Seattle Airbnb Market")
   })
 
+   
+   # Make a select input UI for House Type
+   output$Neighbour <- renderUI ({
+     Neighbour_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
+     selectInput("Neighbour1", "Neighbourhood Group", c("All", as.list(select(Neighbour_distinct, neighbourhood_group_cleansed))))
+     
+   }) 
+   
+   # Reactive expression for the data subsetted to what the user selected
+   filtered_Neighbour <- reactive({
+     if (input$Neighbour1 == "All"){
+       listings2_df
+     } else {
+       filter(listings2_df, neighbourhood_group_cleansed == input$Neighbour1)
+     }
+   })
+   
   output$roomtype <- renderPlot({
-    room_type <- count(listings2_df, room_type)
+    newlisting1 <- filtered_Neighbour()
+    room_type <- count(newlisting1, room_type)
     room_type = mutate(room_type, percent = n / sum(n) * 100)
     room_type$percent <- as.integer(room_type$percent)
     room_type$room_type <- as.character(room_type$room_type)
