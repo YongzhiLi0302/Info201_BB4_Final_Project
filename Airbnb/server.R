@@ -3,6 +3,7 @@ library(shiny)
 library(ggplot2)
 library(dplyr)
 library(leaflet)
+library(R.utils)
 
 calendar_df <- data.table::fread("../data/calendar.csv.gz", stringsAsFactors = FALSE)
 
@@ -57,7 +58,7 @@ shinyServer(function(input,output) {
                                selectedListing$neighbourhood_cleansed, selectedListing$property_type, selectedListing$room_type
       ))), tags$br(),
       sprintf("Rating Score: %d", as.integer(selectedListing$review_scores_rating)), tags$br(),
-      sprintf("Price/day: %s", selectedListing$price), tags$br(),
+      sprintf("Price/night: %s", selectedListing$price), tags$br(),
       sprintf("Bedrooms: %s", selectedListing$bedrooms), tags$br(),
       sprintf("Bathrooms: %s", selectedListing$bathrooms), tags$br(),
       sprintf("Beds: %s", selectedListing$beds), tags$br(),
