@@ -8,7 +8,6 @@ listings2_df <- read.csv("../data/listings 2.csv", stringsAsFactors = FALSE)
 neighbourhood_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
 
 vars <- c(
-  "Is Superhost?" = "host_is_superhost",
   "House Type" = "property_type",
   "Room Type" = "room_type",
   "Price" = "price",
@@ -60,10 +59,8 @@ shinyUI(fluidPage(
                                     width = "auto", height = "auto",
                                     
                                     h3("Airbnb listings explorer"),
-                                    
-                                    selectInput("color", "Color", vars),
-                                    selectInput("size", "Size", vars, selected = "adultpop"),
-                                    uiOutput("neighbourhood")
+                                    uiOutput("neighbourhood"),
+                                    selectInput("color", "Color", vars)
                                     )
                       )),
              tabPanel(title = "Analysis", sidebarLayout(

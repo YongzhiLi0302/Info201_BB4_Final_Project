@@ -5,11 +5,8 @@ library(dplyr)
 library(leaflet)
 library(R.utils)
 
-calendar_df <- data.table::fread("../data/calendar.csv.gz", stringsAsFactors = FALSE)
-
 listings2_df <- data.table::fread("../data/listings 2.csv", stringsAsFactors = FALSE)
 
-review_df <- data.table::fread("../data/reviews.csv.gz", stringsAsFactors = FALSE)
 
 shinyServer(function(input,output) {
   output$welcome <- renderText({
