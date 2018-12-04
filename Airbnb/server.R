@@ -90,7 +90,7 @@ shinyServer(function(input,output) {
   # Make a select input UI for House Type
   output$Neighbor <- renderUI ({
     Neighbor_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
-    selectInput("Neighbor1", "Neighbourhood Group", c("All", as.list(select(Neighbor_distinct, neighbourhood_group_cleansed))))
+    selectInput("Neighbor1", "Select a Neighbourhood", c("All", as.list(select(Neighbor_distinct, neighbourhood_group_cleansed))))
     
   }) 
   
@@ -126,7 +126,7 @@ shinyServer(function(input,output) {
    # Make a select input UI for House Type
    output$Neighbour <- renderUI ({
      Neighbour_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
-     selectInput("Neighbour1", "Neighbourhood Group", c("All", as.list(select(Neighbour_distinct, neighbourhood_group_cleansed))))
+     selectInput("Neighbour1", "Select a Neighbourhood", c("All", as.list(select(Neighbour_distinct, neighbourhood_group_cleansed))))
      
    }) 
    
