@@ -103,6 +103,7 @@ shinyServer(function(input,output) {
     }
   })
   
+  # returns a bar plot funtion of analysis on house type percentage
    output$housetype <- renderPlot({
     newlisting2 <- filtered_Neighbor()
     count_type <- count(newlisting2, property_type)
@@ -129,7 +130,7 @@ shinyServer(function(input,output) {
      
    }) 
    
-   # Reactive expression for the data subsetted to what the user selected
+   # Reactive expression for the data subsetted to what the user selected(house type)
    filtered_Neighbour <- reactive({
      if (input$Neighbour1 == "All"){
        listings2_df
@@ -138,6 +139,7 @@ shinyServer(function(input,output) {
      }
    })
    
+  # returns a bar plot funtion of analysis on room type percentage
   output$roomtype <- renderPlot({
     newlisting1 <- filtered_Neighbour()
     room_type <- count(newlisting1, room_type)
@@ -150,20 +152,22 @@ shinyServer(function(input,output) {
       geom_text(label = room_type$percent) +
       labs(x = "Room Type", y = "Percentage(%)", subtitle = "Room Types in Seattle Airbnb Market")
   })
-
+  
+  # make a select input for room type
   output$price <- renderUI ({
     price_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
     selectInput("price", "Select a Neighbourhood", c("All", as.list(select(price_distinct, neighbourhood_group_cleansed))))
     
   }) 
   
+  #make a select input for house type in price range analysis
   output$house_type <- renderUI ({
     house_type_distinct <- distinct(listings2_df, property_type, keep_all = FALSE)
     selectInput("house_type", "Select a House Type", c("All", as.list(select(house_type_distinct, property_type))))
     
   }) 
   
-  # Reactive expression for the data subsetted to what the user selected
+  # Reactive expression for the data subsetted to what the user selected in price range 
   filtered_price <- reactive({
     if (input$price == "All" & input$house_type == "All"){
       listings2_df
@@ -176,6 +180,7 @@ shinyServer(function(input,output) {
     }
   })
   
+  # returns the bar plot in price range analysis
   output$Price <- renderPlot({
     df_price <- filtered_price()
     df_price$price <- as.character(df_price$price)
