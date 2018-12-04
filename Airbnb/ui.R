@@ -86,7 +86,8 @@ shinyUI(fluidPage(
                                       range in Seattle Airbnb market, so they could predict and adjust their expectations on spending. Hosts/potential hosts are 
                                       welcomed to compare their property price to the market price, and get to know how competitive their prices are, and how much
                                       they could expect to earn on a daily basis."),
-                              uiOutput("price")),
+                              uiOutput("price"),
+                              uiOutput("house_type")),
                  mainPanel(plotOutput("Price"))
                  )),         
              # More information of our app

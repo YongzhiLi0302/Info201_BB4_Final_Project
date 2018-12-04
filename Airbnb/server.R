@@ -156,12 +156,22 @@ shinyServer(function(input,output) {
     
   }) 
   
+  output$house_type <- renderUI ({
+    house_type_distinct <- distinct(listings2_df, property_type, keep_all = FALSE)
+    selectInput("house_type", "Select a House Type", c("All", as.list(select(house_type_distinct, property_type))))
+    
+  }) 
+  
   # Reactive expression for the data subsetted to what the user selected
   filtered_price <- reactive({
-    if (input$price == "All"){
+    if (input$price == "All" & input$house_type == "All"){
       listings2_df
-    } else {
+    } else if (input$price == "All" & input$house_type != "All") {
+      filter(listings2_df, property_type == input$house_type)
+    } else if(input$price != "All" & input$house_type == "All"){
       filter(listings2_df, neighbourhood_group_cleansed == input$price)
+    } else {
+      filter(listings2_df, neighbourhood_group_cleansed == input$price & property_type == input$house_type)
     }
   })
   
