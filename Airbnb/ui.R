@@ -84,8 +84,16 @@ shinyUI(fluidPage(
                                       meanwhile, hosts/potential hosts are able to see the competivity of each type of room in their local market."),
                               uiOutput("Neighbour")
                               ),
-                 mainPanel(plotOutput("roomtype")
-                 ))),         
+                 mainPanel(plotOutput("roomtype"))),
+               sidebarLayout(
+                 sidebarPanel(tags$h2("Price Range"),
+                              tags$h4("Airbnb hosts can set a specific price for their listing properties. Travellers are able to see the price
+                                      range in Seattle Airbnb market, so they could predict and adjust their expectations on spending. Hosts/potential hosts are 
+                                      welcomed to compare their property price to the market price, and get to know how competitive their prices are, and how much
+                                      they could expect to earn on a daily basis."),
+                              uiOutput("price")),
+                 mainPanel(plotOutput("Price"))
+                 )),         
              navbarMenu("More",
                         tabPanel("Contact Us"),
                         tabPanel("Q&A", "common questions")

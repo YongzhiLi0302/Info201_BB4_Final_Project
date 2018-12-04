@@ -144,4 +144,39 @@ shinyServer(function(input,output) {
       labs(x = "Room Type", y = "Percentage(%)", subtitle = "Room Types in Seattle Airbnb Market")
   })
 
+  output$price <- renderUI ({
+    price_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
+    selectInput("price", "Select a Neighbourhood", c("All", as.list(select(price_distinct, neighbourhood_group_cleansed))))
+    
+  }) 
+  
+  # Reactive expression for the data subsetted to what the user selected
+  filtered_price <- reactive({
+    if (input$price == "All"){
+      listings2_df
+    } else {
+      filter(listings2_df, neighbourhood_group_cleansed == input$price)
+    }
+  })
+  
+  output$Price <- renderPlot({
+    df_price <- filtered_price()
+    df_price$price <- as.character(df_price$price)
+    df_price[] <- lapply(df_price, gsub, pattern = "\\$", replacement="")
+    df_price$price <- as.numeric(df_price$price)
+    pricelow <- filter(df_price, price <= 100)
+    pricelow_num <- nrow(pricelow)
+    pricemed <- filter(df_price, price > 100 & price <= 150)
+    pricemed_num <- nrow(pricemed)
+    pricehigh <- filter(df_price, price > 150)
+    pricehigh_num <- nrow(pricehigh)
+    pricerange <- c("0-100", "100-150", "above 150")
+    frequency <- c(pricelow_num, pricemed_num, pricehigh_num)
+    priceall <- data.frame(pricerange, frequency)
+    ggplot(priceall, aes(pricerange, frequency)) + 
+      geom_bar(stat = "identity", width = 0.4, color = "white", fill = "cadetblue", size = 3) +
+      theme_set(theme_gray()) +
+      geom_text(label = priceall$frequency) +
+      labs(x = "Price Range", y = "Frenquency", subtitle = "Price Range in Seattle Airbnb Market")
+  })
 })
