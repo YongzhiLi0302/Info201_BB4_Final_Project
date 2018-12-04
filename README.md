@@ -4,7 +4,7 @@ A link to the shiny app can be found [here]()
 
 # Welcome
 
-We are glad to see you here！At this page, we will guide you through to explore our website. Airbnb in Seattle is your ultimate solution to find/host a Airbnb in Greater Seattle Area. We are an independent, non-commercial set of tools and data that allows you to explore how Aribnb is reallt being used in the city. For travelers, no matter what type of homes you are looking for, there is always a home for you. If you are a host/potential host, feel free to check our website to see what you could expect to be a Superhost!
+We are glad to see you here！At this page, we will guide you through to explore our website. Airbnb in Seattle is your ultimate solution to find/host a Airbnb in Greater Seattle Area. We are an independent, non-commercial set of tools and data that allows you to explore how Aribnb is really being used in the city. For travelers, no matter what type of homes you are looking for, there is always a home for you. If you are a host/potential host, feel free to check our website to see what you could expect to be a Superhost!
 
 # About our Dataset
 
