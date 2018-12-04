@@ -8,8 +8,6 @@ listings2_df <- read.csv("../data/listings 2.csv", stringsAsFactors = FALSE)
 neighbourhood_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
 
 vars <- c(
-  "House Type" = "property_type",
-  "Room Type" = "room_type",
   "Price" = "price",
   "Rating" = "review_scores_rating"
 )

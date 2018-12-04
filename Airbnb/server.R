@@ -7,7 +7,6 @@ library(R.utils)
 
 listings2_df <- data.table::fread("../data/listings 2.csv", stringsAsFactors = FALSE)
 
-
 shinyServer(function(input,output) {
   output$welcome <- renderText({
     paste0("We want to read a file here")
@@ -36,11 +35,21 @@ shinyServer(function(input,output) {
   # Create the map
   output$map <- renderLeaflet({
     df <- filtered_Neighbourhood()
+    if(input$color == "price"){
+      df$price[] <- lapply(df$price, gsub, pattern = "\\$", replacement="")
+      df$price <- as.numeric(df$price)
+    }
+    colorData <- df[[input$color]]
+    pal <- colorBin("RdYlBu", colorData, 4, pretty = FALSE)
     leaflet(data = df) %>%
       addTiles() %>%  # Add default OpenStreetMap map tiles
       setMaxBounds(min(df$longitude), min(df$latitude), max(df$longitude), max(df$latitude)) %>%
-      addCircles(lng = ~longitude, lat = ~latitude, layerId = ~id, radius = 10, color = "#18BC9C",
-               weight = 5, fillOpacity = 0.9)
+      addCircles(lng = ~longitude, lat = ~latitude, layerId = ~id, radius = 25,
+               weight = 8, fillOpacity = 1, stroke = FALSE, fillColor=pal(colorData)) %>%
+      addLegend("bottomleft", pal=pal, values=colorData, title=input$color,
+                layerId="colorLegend")
+    
+    
   })
   
   # Show a popup at the given listing
