@@ -1,3 +1,5 @@
+/* Reference: shiny example of leaflet: https://github.com/rstudio/shiny-examples.git */
+
 input[type="number"] {
   max-width: 80%;
 }
