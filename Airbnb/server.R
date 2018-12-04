@@ -16,6 +16,7 @@ shinyServer(function(input,output) {
    paste0("Here is a short summary of our website")
   })
   
+  # Render UI of neighbourhood_group 
   output$neighbourhood <- renderUI ({
     neighbourhood_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
     selectInput("neighbourhood_group", "Neighbourhood Group", c("All", as.list(select(neighbourhood_distinct, neighbourhood_group_cleansed))))
