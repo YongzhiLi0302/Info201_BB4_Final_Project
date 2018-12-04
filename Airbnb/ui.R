@@ -3,7 +3,7 @@ library(dplyr)
 library(shinyWidgets)
 library(shinythemes)
 library(leaflet)
-
+# Read the major dataset we used for our project
 listings2_df <- read.csv("../data/listings 2.csv", stringsAsFactors = FALSE)
 neighbourhood_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
 
@@ -12,6 +12,7 @@ vars <- c(
   "Rating" = "review_scores_rating"
 )
 
+# ui design for the project
 shinyUI(fluidPage(
   navbarPage(inverse = F,
              fluid = T,
@@ -74,7 +75,9 @@ shinyUI(fluidPage(
                                     selectInput("color", "Color", vars)
                                     )
                       )),
+             # Deep analysis panel
              tabPanel(title = "Analysis", sidebarLayout(
+               # House type analysis, returns a bar plot of percentage stats
                sidebarPanel(
                              tags$h3("House Type"),
                              p("Airbnb hosts can list many types of homes, most common ones are houses and apartments.
@@ -84,7 +87,9 @@ shinyUI(fluidPage(
                              uiOutput("Neighbor")),
                
                mainPanel(plotOutput("housetype"))),
+       
                sidebarLayout(
+                 # Room Type analysis, returns a bar plot of percentage stats
                  sidebarPanel(
                               tags$h3("Room Type"),
                               p("Airbnb hosts can list many different types of rooms, including entire home/apt, private room and shared room.
@@ -94,6 +99,7 @@ shinyUI(fluidPage(
                               ),
                  mainPanel(plotOutput("roomtype"))),
                sidebarLayout(
+                 # Price range analysis, returns a bar plot of frequencies in different price range 
                  sidebarPanel(tags$h3("Price Range"),
                               p("Airbnb hosts can set a specific price for their listing properties. Travellers are able to see the price
                                       range in Seattle Airbnb market, so they could predict and adjust their expectations on spending. Hosts/potential hosts are 
