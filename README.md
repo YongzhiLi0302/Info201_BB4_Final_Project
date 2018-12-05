@@ -1,6 +1,6 @@
 # Airbnb in Seattle Shiny App
 
-A link to the shiny app can be found [here]("https://lint272.shinyapps.io/Airbnb/")
+A link to the shiny app can be found [here](https://lint272.shinyapps.io/Airbnb/)
 
 # Welcome
 
