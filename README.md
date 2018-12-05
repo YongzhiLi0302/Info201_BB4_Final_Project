@@ -59,6 +59,6 @@ A challenge we faced was creating a map including every housing information insi
 # Link to the data set we used:
 * http://insideairbnb.com/get-the-data.html
 
-# Link to the example we referenced:
+# Link to the examples we referenced:
 * http://insideairbnb.com/seattle/
 * https://github.com/rstudio/shiny-examples/tree/master/063-superzip-example

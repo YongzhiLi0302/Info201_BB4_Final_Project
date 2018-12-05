@@ -125,8 +125,9 @@ shinyUI(fluidPage(
                                  p("A challenge we faced was creating a map including every housing information inside. This was solved by debugging again and again."),
                                  tags$h3("Link to the data set we used:"),
                                  p("http://insideairbnb.com/get-the-data.html"),
-                                 tags$h3("Link to the example we referenced:"),
-                                 p("http://insideairbnb.com/seattle/")
+                                 tags$h3("Link to the examples we referenced:"),
+                                 p("http://insideairbnb.com/seattle/"),
+                                 p("https://github.com/rstudio/shiny-examples/tree/master/063-superzip-example")
                                  ),
                         tabPanel("Contact Us",
                                  p("We are more than happy to hear from you. For any concern or comments on our project, feel free to email us."),

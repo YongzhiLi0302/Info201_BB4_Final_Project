@@ -8,14 +8,7 @@ library(R.utils)
 listings2_df <- data.table::fread("../data/listings 2.csv", stringsAsFactors = FALSE)
 
 shinyServer(function(input,output) {
-  output$welcome <- renderText({
-    paste0("We want to read a file here")
-  })
-  
-  output$Summary <- renderText({
-    paste0("Here is a short summary of our website")
-  })
-  
+
   # Render UI of neighbourhood_group 
   output$neighbourhood <- renderUI ({
     neighbourhood_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
@@ -76,7 +69,6 @@ shinyServer(function(input,output) {
                        sprintf("Beds: %s", selectedListing$beds), tags$br(),
                        sprintf("Accommadates: %d people", selectedListing$accommodates), tags$br()
                      )))
-    
     leafletProxy("map") %>% addPopups(lng, lat,  content,
                                       options = popupOptions(closeButton = TRUE))
   }
@@ -96,7 +88,6 @@ shinyServer(function(input,output) {
   output$Neighbor <- renderUI ({
     Neighbor_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
     selectInput("Neighbor1", "Select a Neighbourhood", c("All", as.list(select(Neighbor_distinct, neighbourhood_group_cleansed))))
-    
   }) 
   
   # Reactive expression for the data subsetted to what the user selected
