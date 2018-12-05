@@ -1,6 +1,6 @@
 # Airbnb in Seattle Shiny App
 
-A link to the shiny app can be found [here]()
+A link to the shiny app can be found [here]("https://lint272.shinyapps.io/Airbnb/")
 
 # Welcome
 
@@ -21,7 +21,9 @@ With Airbnb in Seattle, you could ask fundamental questions about Airbnb in any 
 
 * How many listings are there in my neighbourhood and where are they?
 
-* How many hosts are running a business with multiple listings and where they?
+* Do different features of Airbnb affect their price or rating? (eg. Are prices higher for Airbnb hosted by superhosts?)
+
+* How do Airbnbs differ between different regions? (eg. Are there more apartment style Airbnb in downtown than in other areas?)
 
 The tools are presented simply as a interactive map, dataset with filter and text/plot analysis.
 

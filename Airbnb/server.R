@@ -5,7 +5,7 @@ library(dplyr)
 library(leaflet)
 library(R.utils)
 
-listings2_df <- data.table::fread("../data/listings 2.csv", stringsAsFactors = FALSE)
+listings2_df <- data.table::fread("./data/listings 2.csv", stringsAsFactors = FALSE)
 
 shinyServer(function(input,output) {
   output$welcome <- renderText({
@@ -32,21 +32,22 @@ shinyServer(function(input,output) {
     }
   })
   
-  source("../script/apartment_func.R")
+  source("./script/apartment_func.R")
   
   # Create the map
   output$map <- renderLeaflet({
     df <- filtered_Neighbourhood()
     if(input$color == "host_is_superhost"){
       colorData <- ifelse(df$host_is_superhost == "t", "yes", "no")
-      pal <- colorFactor(c("RdYlBu"), colorData)
+      pal <- colorFactor(c("#80b1d3", "#fb8072"), colorData)
     }else if(input$color == "property_type"){
       colorData <- house_type(df$property_type)
-        #colorData <- df[[input$color]]
-        pal <- colorFactor(c("RdYlBu"), colorData)
+      #colorData <- df[[input$color]]
+      pal <- colorFactor(c('#fb8072','#ffffb3','#bebada','#8dd3c7','#80b1d3','#fdb462'), 
+                         colorData)
     }else if(input$color == "room_type"){
       colorData <- df[[input$color]]
-      pal <- colorFactor(c("RdYlBu"), colorData)
+      pal <- colorFactor(c("#80b1d3", "#fb8072", "#8dd3c7"), colorData)
     }else{
       if(input$color == "price"){
         df$price[] <- lapply(df$price, gsub, pattern = "\\$", replacement="")
@@ -55,14 +56,25 @@ shinyServer(function(input,output) {
       colorData <- df[[input$color]]
       pal <- colorBin("RdYlBu", colorData, 4, pretty = FALSE)
     }
+    
+    if(input$size == "none"){
+      radius <- 25
+    }else{
+      if(input$size == "price"){
+        df$price[] <- lapply(df$price, gsub, pattern = "\\$", replacement="")
+        df$price <- as.numeric(df$price)
+      }
+      radius <- df[[input$size]] / 5 #max(df[[input$size]]) * 50
+    }
+    
     leaflet(data = df) %>%
       addTiles(
         urlTemplate = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png'",
         attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
       ) %>%  # Add default OpenStreetMap map tiles
       setMaxBounds(min(df$longitude), min(df$latitude), max(df$longitude), max(df$latitude)) %>%
-      addCircles(lng = ~longitude, lat = ~latitude, layerId = ~id, radius = 25,
-                 weight = 8, fillOpacity = 0.7, stroke = FALSE, fillColor=pal(colorData)) %>%
+      addCircles(lng = ~longitude, lat = ~latitude, layerId = ~id, radius = radius,
+                 weight = 8, fillOpacity = 0.5, stroke = FALSE, fillColor=pal(colorData)) %>%
       addLegend("bottomleft", pal=pal, values=colorData, title=input$color,
                 layerId="colorLegend")
     

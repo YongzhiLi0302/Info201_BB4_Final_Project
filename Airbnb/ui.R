@@ -4,13 +4,19 @@ library(shinyWidgets)
 library(shinythemes)
 library(leaflet)
 # Read the major dataset we used for our project
-listings2_df <- read.csv("../data/listings 2.csv", stringsAsFactors = FALSE)
+listings2_df <- read.csv("./data/listings 2.csv", stringsAsFactors = FALSE)
 neighbourhood_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
 
-vars <- c(
+var1 <- c(
   "Is superhost?" = "host_is_superhost",
   "House Type" = "property_type",
   "Room Type" = "room_type",
+  "Price" = "price",
+  "Rating" = "review_scores_rating"
+)
+
+var2 <- c(
+  "Don't show size" = "none",
   "Price" = "price",
   "Rating" = "review_scores_rating"
 )
@@ -27,7 +33,7 @@ shinyUI(fluidPage(
                       tags$h3("Welcome"),
                       p("We are glad to see you here！At this page, we will guide you through to explore our website.
                         Airbnb in Seattle is your ultimate solution to find/host a Airbnb in Greater Seattle Area.
-                        We are an independent, non-commercial set of tools and data that allows you to explore how Aribnb is reallt being used in the city.
+                        We are an independent, non-commercial set of tools and data that allows you to explore how Aribnb is really being used in the city.
                         For travelers, no matter what type of homes you are looking for, there is always a home for you.
                         If you are a host/potential host, feel free to check our website to see what you could expect to be a Superhost!"),
                       tags$h3("About our Dataset"),
@@ -42,7 +48,8 @@ shinyUI(fluidPage(
                       p("With Airbnb in Seattle, you could ask fundamental questions about Airbnb in any neighbourhood or across the city as a whole.
                         Quesitions such as:"),
                       p("- How many listings are there in my neighbourhood and where are they?"),
-                      p("- How many hosts are running a business with multiple listings and where they?"),
+                      p("- Do different features of Airbnb affect their price or rating? (eg. Are prices higher for Airbnb hosted by superhosts?)"),
+                      p("- How do Airbnbs differ between different regions? (eg. Are there more apartment style Airbnb in downtown than in other areas?)"),
                       p("The tools are presented simply as a interactive map, dataset with filter and text/plot analysis."),
                       tags$h3("Technical Stuff"),
                       p("We used a Shiny App to document our investigation and analysis of the data. In most parts, we used ‘dplyr’, 
@@ -75,7 +82,8 @@ shinyUI(fluidPage(
                                         
                                         h3("Airbnb listings explorer"),
                                         uiOutput("neighbourhood"),
-                                        selectInput("color", "Color", vars)
+                                        selectInput("color", "Color", var1),
+                                        selectInput("size", "Size", var2)
                           )
                       )),
              # Deep analysis panel
@@ -126,9 +134,10 @@ shinyUI(fluidPage(
                                    In order to improve our surface much more concise, we created and wrote many datasets and stored them in the repository."),
                                  p("A challenge we faced was creating a map including every housing information inside. This was solved by debugging again and again."),
                                  tags$h3("Link to the data set we used:"),
-                                 p("http://insideairbnb.com/get-the-data.html"),
+                                 p(a("http://insideairbnb.com/get-the-data.html", href="http://insideairbnb.com/get-the-data.html")),
                                  tags$h3("Link to the example we referenced:"),
-                                 p("http://insideairbnb.com/seattle/")
+                                 p(a("http://insideairbnb.com/seattle/", href="http://insideairbnb.com/seattle/")),
+                                 p(a("https://shiny.rstudio.com/gallery/superzip-example.html", href="https://shiny.rstudio.com/gallery/superzip-example.html"))
                                  ),
                         tabPanel("Contact Us",
                                  p("We are more than happy to hear from you. For any concern or comments on our project, feel free to email us."),
