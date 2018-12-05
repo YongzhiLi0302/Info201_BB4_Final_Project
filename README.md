@@ -15,7 +15,7 @@ Our project works with “Inside Airbnb -Adding data to the debate” data set o
 Our target audience would be travelers and property owners. As users of Airbnb in daily life, we focused on the deep relationship between users and housing hosts. Airbnb shows a wide variety of accommodation online and has the dataset prepared for a global audience to accommodate their needs. To travelers who wish to find a place to stay in any city, there’s always a place for everyone. For travelers, the direction we were interested in is the choice they preferred to make in common situations.
 For the property owner, Airbnb provides them with a deep analysis of their performance, which allows them to optimize and earn as much as possible.
 
-# Through the investigation of ours we want to help
+# Through the Investigation of ours We want to help
 
 With Airbnb in Seattle, you could ask fundamental questions about Airbnb in any neighbourhood or across the city as a whole. Quesitions such as:
 
@@ -24,6 +24,12 @@ With Airbnb in Seattle, you could ask fundamental questions about Airbnb in any 
 * How many hosts are running a business with multiple listings and where they?
 
 The tools are presented simply as a interactive map, dataset with filter and text/plot analysis.
+
+# About Map and Analysis
+
+In our map, there are two categories in Airbnb listing explorer: Neighbourhood Group & Color. In the neighborhood group, users can choose which area they want to find a place to live. In color, it divides into price & rating, each of both has some intervals to represent the difference. For example, if users choose to see the housing price information in Downtown, they can click to choose "Downtown", "Price", all the information in that area will show up on the map, and houses with different price intervals will show in different colors on the map. Moreover, every point in the map has its own hyperlink related to Airbnb for users to get information.
+
+For our analysis, we created some histograms to investigate the ratio of many aspects in different areas in Seattle, including room types, house types and price range. The main idea for our analysis is to provide more general data for travelers and property owners to check some factors may influence their housing choices or price setting.
 
 # Disclaimer
 
@@ -40,7 +46,7 @@ The tools are presented simply as a interactive map, dataset with filter and tex
 We used a Shiny App to document our investigation and analysis of the data. In most parts, we used ‘dplyr’, ‘ggplot2’, and ‘leaflet’ to produce the outputs we wanted. In order to improve our surface much more concise, we created and wrote many datasets and stored them in the repository.
 A challenge we faced was creating a map including every housing information inside. This was solved by debugging again and again.
 
-# Team members
+# Team Members
 
 * Yongzhi Li: yongzhi@uw.edu
 
@@ -51,7 +57,8 @@ A challenge we faced was creating a map including every housing information insi
 * Kairui Liu: liuk25@uw.edu
 
 # Link to the data set we used:
-http://insideairbnb.com/get-the-data.html
+* http://insideairbnb.com/get-the-data.html
 
 # Link to the example we referenced:
-http://insideairbnb.com/seattle/
+* http://insideairbnb.com/seattle/
+* https://github.com/rstudio/shiny-examples/tree/master/063-superzip-example

@@ -41,6 +41,18 @@ shinyUI(fluidPage(
                       p("- How many listings are there in my neighbourhood and where are they?"),
                       p("- How many hosts are running a business with multiple listings and where they?"),
                       p("The tools are presented simply as a interactive map, dataset with filter and text/plot analysis."),
+                      tags$h3("About Map and Analysis"),
+                      p("In our map, there are two categories in Airbnb listing explorer: Neighbourhood Group & Color. In the
+                        neighborhood group, users can choose which area they want to find a place to live. In color, it divides into
+                        price & rating, each of both has some intervals to represent the difference. For example, if users choose to
+                        see the housing price information in Downtown, they can click to choose Downtown, Price, all the
+                        information in that area will show up on the map, and houses with different price intervals will show in
+                        different colors on the map. Moreover, every point in the map has its own hyperlink related to Airbnb website for
+                        users to get information."),
+                      p("For our analysis, we created some histograms to investigate the ratio of many aspects in different areas in
+                        Seattle, including room types, house types and price range. The main idea for our analysis is to provide
+                        more general data for travelers and property owners to check some factors may influence their housing
+                        choices or price setting."),
                       tags$h3("Technical Stuff"),
                       p("We used a Shiny App to document our investigation and analysis of the data. In most parts, we used ‘dplyr’, 
                         ‘ggplot2’, and ‘leaflet’ to produce the outputs we wanted. In order to improve our surface much more concise, 
@@ -114,9 +126,9 @@ shinyUI(fluidPage(
                         tabPanel("Q&A",
                                  tags$h3("Through the investigation of ours we want to help"),
                                  p("- Using mapping to show specific information about each house"),
-                                 p("- The ratio of room types in Seattle"),
-                                 p("- The ratio of number of accommodates in Seattle"),
-                                 p("- The ratio of house types in Seattle"),
+                                 p("- The histogram of room types in different areas in Seattle"),
+                                 p("- The histogram of house types in different areas in Seattle"),
+                                 p("- The histogram of price range with different house types in different areas in Seattle"),
                                  tags$h3("Technical Issues"),
                                  p("We used a Shiny App to document our investigation and analysis of the data. In most parts,
                                    we used ‘dplyr’, ‘ggplot2’, and ‘leaflet’ to produce the outputs we wanted.
