@@ -13,14 +13,14 @@ shinyServer(function(input,output) {
   })
   
   output$Summary <- renderText({
-   paste0("Here is a short summary of our website")
+    paste0("Here is a short summary of our website")
   })
   
   # Render UI of neighbourhood_group 
   output$neighbourhood <- renderUI ({
     neighbourhood_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
     selectInput("neighbourhood_group", "Neighbourhood Group", c("All", as.list(select(neighbourhood_distinct, neighbourhood_group_cleansed))))
-                
+    
   }) 
   
   # Reactive expression for the data subsetted to what the user selected
@@ -36,17 +36,22 @@ shinyServer(function(input,output) {
   # Create the map
   output$map <- renderLeaflet({
     df <- filtered_Neighbourhood()
-    if(input$color == "price"){
-      df$price[] <- lapply(df$price, gsub, pattern = "\\$", replacement="")
-      df$price <- as.numeric(df$price)
+    if(input$color == "host_is_superhost"){
+      colorData <- ifelse(df$host_is_superhost == "t", "yes", "no")
+      pal <- colorFactor(c("blue","red"), colorData)
+    }else{
+      if(input$color == "price"){
+        df$price[] <- lapply(df$price, gsub, pattern = "\\$", replacement="")
+        df$price <- as.numeric(df$price)
+      }
+      colorData <- df[[input$color]]
+      pal <- colorBin("RdYlBu", colorData, 4, pretty = FALSE)
     }
-    colorData <- df[[input$color]]
-    pal <- colorBin("RdYlBu", colorData, 4, pretty = FALSE)
     leaflet(data = df) %>%
       addTiles() %>%  # Add default OpenStreetMap map tiles
       setMaxBounds(min(df$longitude), min(df$latitude), max(df$longitude), max(df$latitude)) %>%
       addCircles(lng = ~longitude, lat = ~latitude, layerId = ~id, radius = 25,
-               weight = 8, fillOpacity = 1, stroke = FALSE, fillColor=pal(colorData)) %>%
+                 weight = 8, fillOpacity = 0.7, stroke = FALSE, fillColor=pal(colorData)) %>%
       addLegend("bottomleft", pal=pal, values=colorData, title=input$color,
                 layerId="colorLegend")
     
@@ -60,20 +65,20 @@ shinyServer(function(input,output) {
     selectedListing <- filter(df, id == listing)
     
     content <- paste(paste0("<a href = \"", selectedListing$listing_url, "\">", tags$h3(selectedListing$name), "</a>"), 
-      as.character(tagList(
-      tags$strong(HTML(sprintf("%s, %s, %s",
-                               selectedListing$neighbourhood_cleansed, selectedListing$property_type, selectedListing$room_type
-      ))), tags$br(),
-      sprintf("Rating Score: %d", as.integer(selectedListing$review_scores_rating)), tags$br(),
-      sprintf("Price/night: %s", selectedListing$price), tags$br(),
-      sprintf("Bedrooms: %s", selectedListing$bedrooms), tags$br(),
-      sprintf("Bathrooms: %s", selectedListing$bathrooms), tags$br(),
-      sprintf("Beds: %s", selectedListing$beds), tags$br(),
-      sprintf("Accommadates: %d people", selectedListing$accommodates), tags$br()
-    )))
-
+                     as.character(tagList(
+                       tags$strong(HTML(sprintf("%s, %s, %s",
+                                                selectedListing$neighbourhood_cleansed, selectedListing$property_type, selectedListing$room_type
+                       ))), tags$br(),
+                       sprintf("Rating Score: %d", as.integer(selectedListing$review_scores_rating)), tags$br(),
+                       sprintf("Price/night: %s", selectedListing$price), tags$br(),
+                       sprintf("Bedrooms: %s", selectedListing$bedrooms), tags$br(),
+                       sprintf("Bathrooms: %s", selectedListing$bathrooms), tags$br(),
+                       sprintf("Beds: %s", selectedListing$beds), tags$br(),
+                       sprintf("Accommadates: %d people", selectedListing$accommodates), tags$br()
+                     )))
+    
     leafletProxy("map") %>% addPopups(lng, lat,  content,
-                                  options = popupOptions(closeButton = TRUE))
+                                      options = popupOptions(closeButton = TRUE))
   }
   
   # When map is clicked, show a popup with city info
@@ -104,7 +109,7 @@ shinyServer(function(input,output) {
   })
   
   # returns a bar plot funtion of analysis on house type percentage
-   output$housetype <- renderPlot({
+  output$housetype <- renderPlot({
     newlisting2 <- filtered_Neighbor()
     count_type <- count(newlisting2, property_type)
     other_type <- filter(count_type, property_type != "Apartment" & property_type != "House")
@@ -121,24 +126,24 @@ shinyServer(function(input,output) {
       geom_text(label = plot_table$sum_percent) +
       labs(x = "House Types", y = "Percentage(%)", subtitle = "House Types in Seattle Airbnb Market")
   })
-
-   
-   # Make a select input UI for House Type
-   output$Neighbour <- renderUI ({
-     Neighbour_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
-     selectInput("Neighbour1", "Select a Neighbourhood", c("All", as.list(select(Neighbour_distinct, neighbourhood_group_cleansed))))
-     
-   }) 
-   
-   # Reactive expression for the data subsetted to what the user selected(house type)
-   filtered_Neighbour <- reactive({
-     if (input$Neighbour1 == "All"){
-       listings2_df
-     } else {
-       filter(listings2_df, neighbourhood_group_cleansed == input$Neighbour1)
-     }
-   })
-   
+  
+  
+  # Make a select input UI for House Type
+  output$Neighbour <- renderUI ({
+    Neighbour_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
+    selectInput("Neighbour1", "Select a Neighbourhood", c("All", as.list(select(Neighbour_distinct, neighbourhood_group_cleansed))))
+    
+  }) 
+  
+  # Reactive expression for the data subsetted to what the user selected(house type)
+  filtered_Neighbour <- reactive({
+    if (input$Neighbour1 == "All"){
+      listings2_df
+    } else {
+      filter(listings2_df, neighbourhood_group_cleansed == input$Neighbour1)
+    }
+  })
+  
   # returns a bar plot funtion of analysis on room type percentage
   output$roomtype <- renderPlot({
     newlisting1 <- filtered_Neighbour()
