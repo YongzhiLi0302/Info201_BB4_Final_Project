@@ -8,7 +8,14 @@ library(R.utils)
 listings2_df <- data.table::fread("../data/listings 2.csv", stringsAsFactors = FALSE)
 
 shinyServer(function(input,output) {
-
+  output$welcome <- renderText({
+    paste0("We want to read a file here")
+  })
+  
+  output$Summary <- renderText({
+    paste0("Here is a short summary of our website")
+  })
+  
   # Render UI of neighbourhood_group 
   output$neighbourhood <- renderUI ({
     neighbourhood_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
@@ -25,13 +32,21 @@ shinyServer(function(input,output) {
     }
   })
   
+  source("../script/apartment_func.R")
   
   # Create the map
   output$map <- renderLeaflet({
     df <- filtered_Neighbourhood()
     if(input$color == "host_is_superhost"){
       colorData <- ifelse(df$host_is_superhost == "t", "yes", "no")
-      pal <- colorFactor(c("blue","red"), colorData)
+      pal <- colorFactor(c("RdYlBu"), colorData)
+    }else if(input$color == "property_type"){
+      colorData <- house_type(df$property_type)
+        #colorData <- df[[input$color]]
+        pal <- colorFactor(c("RdYlBu"), colorData)
+    }else if(input$color == "room_type"){
+      colorData <- df[[input$color]]
+      pal <- colorFactor(c("RdYlBu"), colorData)
     }else{
       if(input$color == "price"){
         df$price[] <- lapply(df$price, gsub, pattern = "\\$", replacement="")
@@ -41,7 +56,10 @@ shinyServer(function(input,output) {
       pal <- colorBin("RdYlBu", colorData, 4, pretty = FALSE)
     }
     leaflet(data = df) %>%
-      addTiles() %>%  # Add default OpenStreetMap map tiles
+      addTiles(
+        urlTemplate = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png'",
+        attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+      ) %>%  # Add default OpenStreetMap map tiles
       setMaxBounds(min(df$longitude), min(df$latitude), max(df$longitude), max(df$latitude)) %>%
       addCircles(lng = ~longitude, lat = ~latitude, layerId = ~id, radius = 25,
                  weight = 8, fillOpacity = 0.7, stroke = FALSE, fillColor=pal(colorData)) %>%
@@ -69,6 +87,7 @@ shinyServer(function(input,output) {
                        sprintf("Beds: %s", selectedListing$beds), tags$br(),
                        sprintf("Accommadates: %d people", selectedListing$accommodates), tags$br()
                      )))
+    
     leafletProxy("map") %>% addPopups(lng, lat,  content,
                                       options = popupOptions(closeButton = TRUE))
   }
@@ -88,6 +107,7 @@ shinyServer(function(input,output) {
   output$Neighbor <- renderUI ({
     Neighbor_distinct <- distinct(listings2_df, neighbourhood_group_cleansed, keep_all = FALSE)
     selectInput("Neighbor1", "Select a Neighbourhood", c("All", as.list(select(Neighbor_distinct, neighbourhood_group_cleansed))))
+    
   }) 
   
   # Reactive expression for the data subsetted to what the user selected
