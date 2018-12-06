@@ -1,6 +1,6 @@
 # Airbnb in Seattle Shiny App
 
-A link to the shiny app can be found [here](https://lint272.shinyapps.io/Airbnb/)
+A link to the shiny app can be found [here.](https://lint272.shinyapps.io/Airbnb/)
 
 # Welcome
 
@@ -32,6 +32,16 @@ The tools are presented simply as a interactive map, dataset with filter and tex
 In our map, there are two categories in Airbnb listing explorer: Neighbourhood Group & Color. In the neighborhood group, users can choose which area they want to find a place to live. In color, it divides into price & rating, each of both has some intervals to represent the difference. For example, if users choose to see the housing price information in Downtown, they can click to choose "Downtown", "Price", all the information in that area will show up on the map, and houses with different price intervals will show in different colors on the map. Moreover, every point in the map has its own hyperlink related to Airbnb for users to get information.
 
 For our analysis, we created some histograms to investigate the ratio of many aspects in different areas in Seattle, including room types, house types and price range. The main idea for our analysis is to provide more general data for travelers and property owners to check some factors may influence their housing choices or price setting.
+
+# Understanding of Our Dataset and Project
+
+After discovering our dataset by using mapping and histograms, we found that most housing listings' reviewing scores in Seattle is higher than 60, which means most travelers experienced comfortable environments in Seattle's housing listings. Moreover, the ratio of apartment, house, and others(condominium, guest suite etc.) has similar rates in Seattle (35%, 33%, 30% each), it shows that housing types in Seattle are evenly distributed.
+
+We also found some "different" data that can be considered as "Outliers". In Downtown area, there is no "house" housing type, "apartment" has 77% in that area. It represents that there are some factors may influence property owners in Downtown don't rent their houses, for example, they prefer to stay by themselves, or there is no house in Downtown because of prices.
+
+About the price, different price level in Seattle has the similar amount of listings. However, in Downtown and University District, the situations are extreme. In University District, most housing price is lower than $100/day. In Downtown, the most price is higher than $150/day. Different locations are the main factor has an influence on many aspects. Price is the most representative.
+
+In a nutshell, Airbnb in Seattle has its own situation, and most parts are positive. Travelers can find the most suitable place to live very easily. Also, for property owners, there are many factors can influence their price setting(housing types, room type, locations etc.) We hope our Shiny App can make a brief introduction for our audience to get information about Airbnb in Seattle easily and conveniently.  
 
 # Disclaimer
 
